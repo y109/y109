@@ -1,36 +1,36 @@
-if v:version < 700
-    finish
-endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " VIM 设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if v:version < 700
+    finish
+endif
+
 " note "{{{
-"" 查看所有所有选项
-" :options
-" 这会打开一个新窗口，其中给出一个选项的列表，并对每个选项提供一行解释。这些选项
-" 根据种类分组。将光标移到一个主题上然后按 <Enter> 就可以跳转到那里。再按一下
-" <Enter> 或者 CTRL-O 就可以跳回来。
-" :set all		显示除了终端设置以外的所有选项。
 
-" 光标移动
-" 0 到行的第一个字符, ^ 第一个非空白字符
-" 删除到行首 d0
-
-"
 " f{char} 到右侧第 [count] 次出现的字符 {char}。光标放在 {char} 上,F 向左
 " t{char} 到右侧第 [count] 次出现的字符 {char} 之前。光标放在{char} 左边
 " ; 左重复 f/t , 右重复 f/t
 "
 " "}}}
-" 介绍 bash alias
+" 解释 bash alias
 :set shellcmdflag=-ic
+
+filetype off
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 定义一些变量
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:os = substitute(system('uname'), '\n', '', '')
+let g:hostname = substitute(system('hostname'), '\n', '', '')
+let g:pwd = substitute(system('pwd'), '\n', '', '')
+let g:filename = expand('%:p')
+let g:who = 'yaojungang'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 安装插件
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 插件列表 http://vim-scripts.org/vim/scripts.html
 
-filetype off
 " pathogen
 " http://www.vim.org/scripts/script.php?script_id=2332
 " https://github.com/tpope/vim-pathogen
@@ -50,7 +50,6 @@ Bundle 'gmarik/vundle'
 
 " Color
 "
-Bundle 'Lucius'
 Bundle 'jellybeans.vim'
 Bundle 'badwolf'
 " 插件
@@ -524,47 +523,6 @@ map <Leader>sd :VCSVimDiff<CR>
 " 重新载入 .vimrc 配置
 :nmap <Leader>rv :source $MYVIMRC<CR>
 
-" SFTP
-:nmap <silent><Leader>wu :w<CR>:!/Users/yaojungang/work/develop/shell/sftpatohostpath.sh gavinyao@10.6.207.220:/data/web/dzqun_dev/ %:h %<CR><CR>
-:nmap <silent><Leader>ww :w<CR>:!/Users/yaojungang/work/develop/shell/sftpatohostpath.sh gavinyao@10.6.207.220:/data/home/gavinyao/develop/dzqun/ %:h %<CR><CR>
-
-:nmap <silent><Leader>uu :call AutoUpload1()<CR>:echomsg "Upload success"<CR>redraw!<CR>
-
-if !exists('*AutoUpload2Local')
-  function! AutoUpload2Local()
-      silent execute "!cp -r % /data/video/%:h & > /dev/null &"
-      redraw
-  endfunction
-endif
-
-if !exists('*AutoUpload')
-  function! AutoUpload()
-      :cd /Users/yaojungang/work/develop/php/cloud/dzqun-branches
-      execute "!scp -P 36000 % gavinyao@10.6.207.220:/data/web/dzqun_dev/%:h"
-  endfunction
-endif
-
-" 后台显示命令
-if !exists('*AutoUpload1')
-  function! AutoUpload1()
-      " :cd /Users/yaojungang/work/develop/php/cloud/dzqun-branches
-      silent execute "!scp -P 36000 % gavinyao@10.6.207.220:/data/web/dzqun_dev/%:h & > /dev/null &" | redraw!
-  endfunction
-endif
-
-if !exists('*AutoUpload0')
-  function! AutoUpload0()
-      silent execute "!/Users/yaojungang/work/develop/shell/sftpatohostpath.sh gavinyao@10.6.207.220:/data/web/dzqun_dev/ %:h % " | redraw!
-  endfunction
-endif
-
-" 保存文件时自动上传
-" autocmd BufWritePost,FileWritePost *.php call AutoUpload()
-" autocmd FileWritePost *.php call AutoUpload()
-
-" :set makeprg=php\ -l\ %
-" :autocmd BufWritePre,FileWritePost *.php make
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " color & syntax & hight 设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -584,9 +542,6 @@ if &t_Co > 2 || has("gui_running")
     set hlsearch
 endif
 
-" :colorscheme lucius
-" :LuciusBlack
-" :LuciusBlackHighContrast
 colorscheme badwolf
 
 " -------------------------------------------------------------------
@@ -942,10 +897,8 @@ let Tlist_GainFocus_On_ToggleOpen=1
 " :nmap <Leader>cal :Calendar<CR>
 "-----------------------------------------------------------------
 " FuzzyFinder
-:nmap <silent> <Leader>f :FufFile<CR>
+:nmap <silent> <Leader>g :FufFile<CR>
 
-"-----------------------------------------------------------------
-"
 "-----------------------------------------------------------------
 "
 " http://www.vim.org/scripts/download_script.php?src_id=16171
@@ -973,31 +926,6 @@ let g:indent_guides_enable_on_vim_startup = 0
 "
 let g:phpErrorMarker#automake = 0
 "-----------------------------------------------------------------
-" 代码折叠
-setlocal foldmethod=manual
-Bundle 'phpfolding.vim'
-" 关闭自动折叠功能
-let g:DisableAutoPHPFolding = 1
-let php_folding=1
-:nmap <Leader>ff :call FoldToggle()<CR><CR>
-
-:let g:foldStatus = 1
-if !exists("*FoldToggle")
-function! FoldToggle()
-    echo "FoldToggle"
-    if g:foldStatus == 1
-        echo "DisableFold"
-        let g:foldStatus = 0
-        :DisablePHPFolds
-    else
-        echo "EnableFold"
-        let g:foldStatus = 1
-        :EnableFastPHPFolds
-    endif
-endfunction
-endif
-
-"-----------------------------------------------------------------
 "
 if !exists("*AddHeader")
 function! AddHeader()
@@ -1014,33 +942,6 @@ endif
 :nmap <Leader>ah :call AddHeader()<CR>
 
 "-----------------------------------------------------------------
-" 代码折叠
-" setlocal foldmethod=manual
-" 关闭自动代码折叠
-let g:DisableAutoPHPFolding = 1
-
-Bundle 'phpfolding.vim'
-
-:nmap <Leader>ff :call FoldToggle()<CR><CR>
-
-:let g:foldStatus = 0
-
-if !exists("*FoldToggle")
-function! FoldToggle()
-    echo "FoldToggle"
-    if g:foldStatus == 1
-        echo "DisableFold"
-        let g:foldStatus = 0
-        :DisablePHPFolds
-    else
-        echo "EnableFold"
-        let g:foldStatus = 1
-        :EnableFastPHPFolds
-    endif
-endfunction
-endif
-
-"-----------------------------------------------------------------
 map <Leader>fj :call JsBeautify()<cr>
 " or
 " autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
@@ -1050,3 +951,14 @@ map <Leader>fj :call JsBeautify()<cr>
 " autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
 "-----------------------------------------------------------------
 
+let g:os_vimrc = $HOME . "/work/shell/etc/vim/" . g:os . '.vimrc'
+if filereadable(g:os_vimrc)
+    execute 'silent! source ' . g:os_vimrc
+endif
+
+let g:host_vimrc = $HOME . "/work/shell/etc/vim/host.d/" . g:hostname . '.vimrc'
+if filereadable(g:host_vimrc)
+    execute 'silent! source ' . g:host_vimrc
+endif
+
+"-----------------------------------------------------------------

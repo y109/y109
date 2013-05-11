@@ -1,0 +1,3 @@
+" I am Mac fanse
+" :set makeprg=php\ -l\ %
+" :autocmd BufWeitePre,FileWritePost *.php make
