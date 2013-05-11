@@ -1,3 +1,6 @@
+if v:version < 700
+    finish
+endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " VIM 设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -19,6 +22,9 @@
 " ; 左重复 f/t , 右重复 f/t
 "
 " "}}}
+" 介绍 bash alias
+:set shellcmdflag=-ic
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 安装插件
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -85,6 +91,40 @@ let MRU_Exclude_Files = '^\/var\/.*\/svn-.*\|^/tmp/.*\|^/var/tmp/.*'
 Bundle 'Syntastic'
 Bundle 'Simple-Javascript-Indenter'
 Bundle 'html-xml-tag-matcher'
+Bundle 'xml.vim'
+Bundle 'maksimr/vim-jsbeautify'
+" bck search 
+" curl http://betterthangrep.com/ack-standalone > ~/bin/ack && chmod 0755 !#:3
+Bundle 'mihaifm/bck'
+
+Bundle 'rking/ag.vim'
+let g:agprg="/usr/local/bin/ag --column"
+
+" Dash
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'rizzatti/dash.vim'
+
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+
+" 自动划分窗口
+Bundle 'zhaocai/GoldenView.Vim'
+
+" 默认的快捷键与系统的有冲突
+let g:goldenview__enable_default_mapping = 0
+" 1. split to tiled windows
+" nmap <silent> <C-L>  <Plug>GoldenViewSplit
+nmap <silent> <C-S>  <Plug>GoldenViewSplit
+
+" 2. quickly switch current window with the main pane
+" and toggle back
+nmap <silent> <F8>   <Plug>GoldenViewSwitchMain
+nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
+
+" 3. jump to next and previous window
+nmap <silent> <C-N>  <Plug>GoldenViewNext
+nmap <silent> <C-P>  <Plug>GoldenViewPrevious
+
 " 不再使用的插件
 " Bundle 'surround.vim'
 " Bundle 'crooloose/nerdtree.git'
@@ -302,15 +342,13 @@ set writebackup
 set backup
 " 备份目录
 set backupdir=/tmp
-" set backupdir=~/.Trash
 " 交换文件
 set directory=/tmp//
-let _trashDir = $HOME . "/.Trash"
-if isdirectory(_trashDir)
+if isdirectory(expand("~/.Trash"))
     set backupdir=~/.Trash
     set directory=~/.Trash
 endif
-" autocmd BufWritePre * let &bex = '-' . strftime("%Y%m%d-%H%M%S") . '.bak'
+" 每分钟备份一个
 autocmd BufWritePre * let &bex = '-' . strftime("%Y%m%d-%H%M") . '.bak'
 
 " 自动把内容写回文件
@@ -342,7 +380,7 @@ set updatecount=20
 set viminfo='20,\"50,:20,%,n~/.viminfo
 
 " vimdiff
-:set diffopt=filler,context:3
+:set diffopt=filler,context:9
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MAP 设置
@@ -365,6 +403,7 @@ set viminfo='20,\"50,:20,%,n~/.viminfo
 :map 77 :tabnext 7<CR>
 :map 88 :tabnext 8<CR>
 
+
 " 上一个标签
 " = gT
 :map 99 :tabprevious<CR>
@@ -382,20 +421,24 @@ set viminfo='20,\"50,:20,%,n~/.viminfo
 " 定义一个使用 "mapleader" 变量的映射，可以使用特殊字串 "<Leader>"。它会被 "mapleader" 的字串值所替换。如果 "mapleader" 未设置或为空，则用反斜杠代替
 let mapleader=","
 
+" 显示所有marks
+:nnoremap <Leader>m :marks<CR>
+
 " 执行当前行
 " 同 "ayy@a
 :nmap <Leader>lr <Esc>yy@"
 
 " 退出
 :nmap <Leader>q :q<CR>
+
 " sudo 存档
-" :w !sudo tee %
+:nmap <Leader>ws :w !sudo tee %
 
 " 行首
-:nmap <Leader>la ^<CR>
+:nmap <Leader>la ^
 
 " 行尾
-:nmap <Leader>le $<CR>
+:nmap <Leader>le $
 
 " 列出所有键盘映射
 :nmap <Leader>vm :map<CR>
@@ -485,7 +528,14 @@ map <Leader>sd :VCSVimDiff<CR>
 :nmap <silent><Leader>wu :w<CR>:!/Users/yaojungang/work/develop/shell/sftpatohostpath.sh gavinyao@10.6.207.220:/data/web/dzqun_dev/ %:h %<CR><CR>
 :nmap <silent><Leader>ww :w<CR>:!/Users/yaojungang/work/develop/shell/sftpatohostpath.sh gavinyao@10.6.207.220:/data/home/gavinyao/develop/dzqun/ %:h %<CR><CR>
 
-:nmap <silent><Leader>uu :call AutoUpload1()<CR>:echomsg "Upload successj"<CR><C-l>
+:nmap <silent><Leader>uu :call AutoUpload1()<CR>:echomsg "Upload success"<CR>redraw!<CR>
+
+if !exists('*AutoUpload2Local')
+  function! AutoUpload2Local()
+      silent execute "!cp -r % /data/video/%:h & > /dev/null &"
+      redraw
+  endfunction
+endif
 
 if !exists('*AutoUpload')
   function! AutoUpload()
@@ -709,8 +759,8 @@ let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 " Define file-type dependent dictionaries.
 let g:neocomplcache_dictionary_filetype_lists = {
     \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
+    \ 'vimshell' : expand('~/.vimshell_hist'),
+    \ 'scheme' : expand('~/.gosh_completions')
     \ }
 
 " Define keyword, for minor languages
@@ -801,6 +851,8 @@ let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'
 " ctags
 "
 " http://pkgs.fedoraproject.org/repo/pkgs/ctags/ctags-5.8.tar.gz/c00f82ecdcc357434731913e5b48630d/ctags-5.8.tar.gz
+" svn co https://ctags.svn.sourceforge.net/svnroot/ctags ctags
+"
 
 "-----------------------------------------------------------------
 
@@ -889,6 +941,10 @@ let Tlist_GainFocus_On_ToggleOpen=1
 " wget http://www.vim.org/scripts/download_script.php?src_id=14880 -O calendar.vim
 " :nmap <Leader>cal :Calendar<CR>
 "-----------------------------------------------------------------
+" FuzzyFinder
+:nmap <silent> <Leader>f :FufFile<CR>
+
+"-----------------------------------------------------------------
 "
 "-----------------------------------------------------------------
 "
@@ -917,9 +973,34 @@ let g:indent_guides_enable_on_vim_startup = 0
 "
 let g:phpErrorMarker#automake = 0
 "-----------------------------------------------------------------
+" 代码折叠
+setlocal foldmethod=manual
+Bundle 'phpfolding.vim'
+" 关闭自动折叠功能
+let g:DisableAutoPHPFolding = 1
+let php_folding=1
+:nmap <Leader>ff :call FoldToggle()<CR><CR>
+
+:let g:foldStatus = 1
+if !exists("*FoldToggle")
+function! FoldToggle()
+    echo "FoldToggle"
+    if g:foldStatus == 1
+        echo "DisableFold"
+        let g:foldStatus = 0
+        :DisablePHPFolds
+    else
+        echo "EnableFold"
+        let g:foldStatus = 1
+        :EnableFastPHPFolds
+    endif
+endfunction
+endif
+
+"-----------------------------------------------------------------
 "
-if exists("*AddTitle")
-function! AddTitle()
+if !exists("*AddHeader")
+function! AddHeader()
     call append(1,"/**")
     call append(2," *")
     call append(3," * 作者:Gavinyao (gavinyao@tencent.com)")
@@ -930,5 +1011,42 @@ function! AddTitle()
     call append(8," **/")
 endfunction
 endif
+:nmap <Leader>ah :call AddHeader()<CR>
 
+"-----------------------------------------------------------------
+" 代码折叠
+" setlocal foldmethod=manual
+" 关闭自动代码折叠
+let g:DisableAutoPHPFolding = 1
+
+Bundle 'phpfolding.vim'
+
+:nmap <Leader>ff :call FoldToggle()<CR><CR>
+
+:let g:foldStatus = 0
+
+if !exists("*FoldToggle")
+function! FoldToggle()
+    echo "FoldToggle"
+    if g:foldStatus == 1
+        echo "DisableFold"
+        let g:foldStatus = 0
+        :DisablePHPFolds
+    else
+        echo "EnableFold"
+        let g:foldStatus = 1
+        :EnableFastPHPFolds
+    endif
+endfunction
+endif
+
+"-----------------------------------------------------------------
+map <Leader>fj :call JsBeautify()<cr>
+" or
+" autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+" for html
+" autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+" for css or scss
+" autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+"-----------------------------------------------------------------
 
