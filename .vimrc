@@ -1,6 +1,6 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" VIM 设置
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" VIM CONFIG start
+"-----------------------------------------------------------------
 if v:version < 700
     finish
 endif
@@ -11,128 +11,12 @@ endif
 " t{char} 到右侧第 [count] 次出现的字符 {char} 之前。光标放在{char} 左边
 " ; 左重复 f/t , 右重复 f/t
 "
+" [[ \ ]] 会在 { 上下跳转
 " "}}}
+"
 " 解释 bash alias
 :set shellcmdflag=-ic
 
-filetype off
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 定义一些变量
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:os = substitute(system('uname'), '\n', '', '')
-let g:hostname = substitute(system('hostname'), '\n', '', '')
-let g:pwd = substitute(system('pwd'), '\n', '', '')
-let g:filename = expand('%:p')
-let g:who = 'yaojungang'
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 安装插件
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 插件列表 http://vim-scripts.org/vim/scripts.html
-
-" pathogen
-" http://www.vim.org/scripts/script.php?script_id=2332
-" https://github.com/tpope/vim-pathogen
-" 插件集中到 bundle 目录
-" 让每个插件占有一个单独的目录，解决插件文件分散的问题
-" wget -O ~/.vim/autoload/pathogen.vim http://www.vim.org/scripts/download_script.php?src_id=19365
-" 要启用它，还要在 .vimrc 文件里, filetypd plugin indent on 之前的任何地方，加入下面这句
-call pathogen#infect()
-
-" git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-"
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-" let Vundle manage Vundle
-" required! 
-Bundle 'gmarik/vundle'
-
-" Color
-"
-Bundle 'jellybeans.vim'
-Bundle 'badwolf'
-" 插件
-" 自动补齐
-Bundle 'Shougo/neocomplcache.git'
-" 自动完成
-Bundle 'Shougo/neosnippet.git'
-" snipmate 定义文件
-Bundle 'snipmate-snippets'
-" 注释插件
-Bundle 'scrooloose/nerdcommenter.git'
-" 彩色状态栏插件
-Bundle 'Lokaltog/vim-powerline.git'
-" 切换配色的插件
-Bundle 'ScrollColors'
-" 日历插件
-Bundle 'mattn/calendar-vim.git'
-" 比较文件夹的插件
-" Bundle 'DirDiff.vim'
-" 自动补齐括号
-Bundle 'AutoClose'
-" Grep
-Bundle 'grep.vim'
-" 可视化缩进
-Bundle 'nathanaelkane/vim-indent-guides.git'
-" 加强 % 匹配的能力
-Bundle 'matchit.zip'
-" make 时自动检查php语法错误
-" Bundle 'phpErrorMarker'
-" taglist"
-Bundle 'taglist.vim'
-" Doxgen
-Bundle 'DoxygenToolkit.vim'
-" 最近打开的文件
-Bundle 'mru.vim'
-let MRU_Exclude_Files = '^\/var\/.*\/svn-.*\|^/tmp/.*\|^/var/tmp/.*'
-" 语法检查
-Bundle 'Syntastic'
-Bundle 'Simple-Javascript-Indenter'
-Bundle 'html-xml-tag-matcher'
-Bundle 'xml.vim'
-Bundle 'maksimr/vim-jsbeautify'
-" bck search 
-" curl http://betterthangrep.com/ack-standalone > ~/bin/ack && chmod 0755 !#:3
-Bundle 'mihaifm/bck'
-
-Bundle 'rking/ag.vim'
-let g:agprg="/usr/local/bin/ag --column"
-
-" Dash
-Bundle 'rizzatti/funcoo.vim'
-Bundle 'rizzatti/dash.vim'
-
-Bundle 'L9'
-Bundle 'FuzzyFinder'
-
-" 自动划分窗口
-Bundle 'zhaocai/GoldenView.Vim'
-
-" 默认的快捷键与系统的有冲突
-let g:goldenview__enable_default_mapping = 0
-" 1. split to tiled windows
-" nmap <silent> <C-L>  <Plug>GoldenViewSplit
-nmap <silent> <C-S>  <Plug>GoldenViewSplit
-
-" 2. quickly switch current window with the main pane
-" and toggle back
-nmap <silent> <F8>   <Plug>GoldenViewSwitchMain
-nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
-
-" 3. jump to next and previous window
-nmap <silent> <C-N>  <Plug>GoldenViewNext
-nmap <silent> <C-P>  <Plug>GoldenViewPrevious
-
-" 不再使用的插件
-" Bundle 'surround.vim'
-" Bundle 'crooloose/nerdtree.git'
-"
-filetype plugin indent on     " required
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 一般设定
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 关闭vi兼容模式，不使用vi的键盘模式
 set nocompatible
 
@@ -153,8 +37,11 @@ set incsearch
 " 在处理未保存或只读文件的时候，弹出确认
 set confirm
 
+" 定义一个使用 "mapleader" 变量的映射，可以使用特殊字串 "<Leader>"。它会被 "mapleader" 的字串值所替换。如果 "mapleader" 未设置或为空，则用反斜杠代替
+let mapleader=","
+
 " 与windows共享剪贴板
-"set clipboard+=unnamed
+set clipboard+=unnamed
 
 " 用 CursorLine |hl-CursorLine| 高亮光标所在的屏幕行。用于方便定位光标。
 set cursorline
@@ -217,11 +104,7 @@ set encoding=utf-8
 " set fencs=utf-8,gbk,gb2312
 set fileencodings=utf-8,gbk,gb2312
 
-if has("win32")
-    set fileencoding=chinese
-else
-    set fileencoding=utf-8
-endif
+set fileencoding=utf-8
 
 set termencoding=utf-8
 
@@ -255,7 +138,7 @@ set laststatus=2
 " 状态栏内容printf 风格 %-0{minwid}.{maxwid}{item}
 " F:完整文件名 m:修改标志位 r:只读标志位 h:帮助缓冲区标志位 w:预览窗口标志位
 "
-set statusline=%<\ %1*%F%h%m%r\ %2*\ [%l,%v]\ [%{&ff}]\%9*%=%b\ 0x%B\ \ %{strftime(\"%Y-%m-%d\ %H:%M:%S\")}\ %3*\ %02P\ 
+set statusline=%<\ %1*%F%h%m%r\ %2*\ [%l,%v]\ [%{&ff}]\%9*%=%b\ 0x%B\ \ %{strftime(\"%Y-%m-%d\ %H:%M:%S\")}\ %3*\ %02P\
 " highlight User1 term=bold cterm=bold ctermbg=white ctermfg=darkblue
 highlight User1 ctermbg=white ctermfg=darkblue
 highlight User2 ctermbg=darkgray ctermfg=white
@@ -266,54 +149,8 @@ highlight User9 ctermbg=darkgray ctermfg=black
 set showtabline=2
 
 " Tab显示格式
-" set tablise+=%<\ %F%h%m%r\ [%{&ff}]%=%{strftime(\"%Y-%m-%d\ %H:%M:%S\")}\ \ 
-
-" 显示TAB Index
-" http://superuser.com/questions/331272/vim-show-the-index-of-tabs-in-the-tabline
-" (Based on http://stackoverflow.com/questions/5927952/whats-implementation-of-vims-default-tabline-function)
-if exists("+showtabline")
-    function! MyTabLine()
-        let s = ''
-        let wn = ''
-        let t = tabpagenr()
-        let i = 1
-        while i <= tabpagenr('$')
-            let buflist = tabpagebuflist(i)
-            let winnr = tabpagewinnr(i)
-            let s .= '%' . i . 'T'
-            let s .= (i == t ? '%1*' : '%2*')
-            let s .= ' '
-            let wn = tabpagewinnr(i,'$')
-
-            let s .= '%#TabNum#'
-            let s .= i
-            " let s .= '%*'
-            let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
-            let bufnr = buflist[winnr - 1]
-            let file = bufname(bufnr)
-            let buftype = getbufvar(bufnr, 'buftype')
-            if buftype == 'nofile'
-                if file =~ '\/.'
-                    let file = substitute(file, '.*\/\ze.', '', '')
-                endif
-            else
-                let file = fnamemodify(file, ':p:t')
-            endif
-            if file == ''
-                let file = '[No Name]'
-            endif
-            let s .= ' ' . file . ' '
-            let i = i + 1
-        endwhile
-        let s .= '%T%#TabLineFill#%='
-        let s .= (tabpagenr('$') > 1 ? '%999XX' : 'X')
-        return s
-    endfunction
-    set stal=2
-    set tabline=%!MyTabLine()
-    highlight link TabNum Special
-endif
-
+" set tablise+=%<\ %F%h%m%r\ [%{&ff}]%=%{strftime(\"%Y-%m-%d\ %H:%M:%S\")}\ \
+"
 " 在 Vim 窗口右下角，标尺的右边显示未完成的命令。例如，当你输入 "2f"，Vim 在等
 " 你输入要查找的字符并且显示 "2f"。当你再输入 w，"2fw" 命令被执行，"2f" 自动消失。
 set showcmd
@@ -343,10 +180,12 @@ set backup
 set backupdir=/tmp
 " 交换文件
 set directory=/tmp//
+
 if isdirectory(expand("~/.Trash"))
     set backupdir=~/.Trash
     set directory=~/.Trash
 endif
+
 " 每分钟备份一个
 autocmd BufWritePre * let &bex = '-' . strftime("%Y%m%d-%H%M") . '.bak'
 
@@ -378,236 +217,151 @@ set updatecount=20
 " n    - set name of viminfo file
 set viminfo='20,\"50,:20,%,n~/.viminfo
 
+" set sessionoptions='blank,buffers,curdir,folds,help,options,tabpages,winsize'
+" set sessionoptions=globals,buffers,curdir,folds,help,options,tabpages
 " vimdiff
 :set diffopt=filler,context:9
 
+"-----------------------------------------------------------------
+" VIM CONFIG end
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" MAP 设置
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 快捷键超时时间
-" set timeoutlen=3000
+" VAR start
+"-----------------------------------------------------------------
+let g:os = substitute(system('uname'), '\n', '', '')
+let g:hostname = substitute(system('hostname'), '\n', '', '')
+" let g:pwd = substitute(system('pwd'), '\n', '', '')
+let g:pwd = getcwd()
+autocmd BufEnter * if expand("%:p:h") !~ '^/tmp' | let g:filename = expand('%:p') | endif
+"-----------------------------------------------------------------
+" VAR end
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Use F10 to toggle 'paste' mode
-" set pastetoggle=<F10>
-" 切换到粘贴模式
-" set paste
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" {{{
+" PLUGIN start
+" }}}
+"-----------------------------------------------------------------
+filetype off
+" 插件列表 http://vim-scripts.org/vim/scripts.html
 
-" 切换tab 的快捷键
-:map 11 :tabnext 1<CR>
-:map 22 :tabnext 2<CR>
-:map 33 :tabnext 3<CR>
-:map 44 :tabnext 4<CR>
-:map 55 :tabnext 5<CR>
-:map 66 :tabnext 6<CR>
-:map 77 :tabnext 7<CR>
-:map 88 :tabnext 8<CR>
+" https://github.com/tpope/vim-pathogen
+call pathogen#infect()
 
+" git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+"
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+" let Vundle manage Vundle
+Bundle 'gmarik/vundle'
 
-" 上一个标签
-" = gT
-:map 99 :tabprevious<CR>
+" Color "
+Bundle 'jellybeans.vim'
+Bundle 'badwolf'
+Bundle 'peaksea'
+Bundle 'altercation/vim-colors-solarized'
+" 插件
+" 自动补齐
+Bundle 'Shougo/neocomplcache.git'
+" 自动完成
+Bundle 'Shougo/neosnippet.git'
+" snipmate 定义文件
+Bundle 'snipmate-snippets'
+" 注释插件
+Bundle 'scrooloose/nerdcommenter.git'
+" 彩色状态栏插件
+Bundle 'Lokaltog/vim-powerline.git'
+" 切换配色的插件
+Bundle 'ScrollColors'
+" 日历插件
+Bundle 'mattn/calendar-vim.git'
+" 比较文件夹的插件
+" Bundle 'DirDiff.vim'
+" 自动补齐括号
+Bundle 'AutoClose'
+" Grep
+Bundle 'grep.vim'
+" 可视化缩进
+Bundle 'nathanaelkane/vim-indent-guides.git'
+" 加强 % 匹配的能力
+Bundle 'matchit.zip'
 
-" 下一个标签
-" = gt
-:map 00 :tabnext<CR>
+" taglist"
+Bundle 'taglist.vim'
+" tagbar
+Bundle 'Tagbar'
+" Doxgen
+Bundle 'DoxygenToolkit.vim'
+" 最近打开的文件
+Bundle 'mru.vim'
+let MRU_Exclude_Files = '^\/var\/.*\/svn-.*\|^/tmp/.*\|^/var/tmp/.*'
+" 语法检查
+Bundle 'Syntastic'
+Bundle 'Simple-Javascript-Indenter'
+Bundle 'html-xml-tag-matcher'
+Bundle 'xml.vim'
+Bundle 'maksimr/vim-jsbeautify'
+" bck search
+" curl http://betterthangrep.com/ack-standalone > ~/bin/ack && chmod 0755 !#:3
+Bundle 'mihaifm/bck'
 
-" 加大窗口
-:map ++ <C-w>+
+" 类似 bck 的一个搜索工具
+Bundle 'rking/ag.vim'
+let g:agprg="/usr/local/bin/ag --column"
 
-" 缩小窗口
-:map -- <C-w>-
+" Dash
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'rizzatti/dash.vim'
 
-" 定义一个使用 "mapleader" 变量的映射，可以使用特殊字串 "<Leader>"。它会被 "mapleader" 的字串值所替换。如果 "mapleader" 未设置或为空，则用反斜杠代替
-let mapleader=","
+" 快速导航
+Bundle 'ctrlp.vim'
+" 路径从哪个开始匹配
+" C-t 在新 tab 打开文件
+let g:ctrlp_working_path_mode = 'w'
+" 切换模式 <C-f> <C-b>
 
-" 显示所有marks
-:nnoremap <Leader>m :marks<CR>
+" C_Y 时在哪个窗口打开文件
+let g:ctrlp_open_new_file = 't'
+let g:ctrlp_open_multiple_files = '9tjr'
 
-" 执行当前行
-" 同 "ayy@a
-:nmap <Leader>lr <Esc>yy@"
-
-" 退出
-:nmap <Leader>q :q<CR>
-
-" sudo 存档
-:nmap <Leader>ws :w !sudo tee %
-
-" 行首
-:nmap <Leader>la ^
-
-" 行尾
-:nmap <Leader>le $
-
-" 列出所有键盘映射
-:nmap <Leader>vm :map<CR>
-
-" 显示选项
-:nmap <Leader>vo :help options<CR>
-
-" 切换是否显示行号
-" nmap <Leader>vn :set number!<CR>
-:nmap <Leader>vn :set invnumber<CR>
-
-" 显示寄存器
-:nmap <Leader>vr :reg<CR>
-
-" 当前窗口垂直划分成两个
-:nmap <Leader>wv <C-W>v
-
-" 光标跳到左边窗口
-:nmap <Leader>wh <C-W><Left>
-
-" 光标跳到下边窗口
-:nmap <Leader>wj <C-W><Down>
-
-" 光标跳到上边窗口
-:nmap <Leader>wk <C-W><Up>
-
-" 光标跳到右边窗口
-:nmap <Leader>wl <C-W><Right>
-
-" 光标跳转到最顶上的窗口
-:nmap <Leader>wt <C-W>t
-
-" 光标跳转到最底下的窗口
-:nmap <Leader>wb <C-W>b
-
-" 窗口移到最上边
-:nmap <Leader>wK <C-W>K
-
-" 窗口移到最下边
-:nmap <Leader>wJ <C-W>J
-
-" 窗口移到最左边
-:nmap <Leader>wH <C-W>H
-
-" 窗口移到最右边
-:nmap <Leader>wL <C-W>L
-
-" 窗口移到新Tab里
-" 注意:tab split 会建立一个新的标签页，包含一个窗口，编辑和刚才所在窗口中的缓冲区相同的缓冲
-:nmap <Leader>wT <C-W>T
-
-" 上移本行
-:nmap <Leader>lj :m-2<CR>
-
-" 下移本行
-:nmap <Leader>lk :m+<CR>
-
-" 列出当前光标所在的行的所有的匹配，然后选择一个并跳转之
-" [I 在当前文件中搜索所有这个单词
-:nmap <Leader>fs [I:let index = 1<Bar>let index = input("第几个? ")<Bar>exe "normal " . index ."[\t"<Bar>unlet index<CR>
-
-" 插入当前路径
-:imap <Leader>ap :r !pwd<CR>A
-
-" 插入当前时间
-:imap <Leader>at <C-R>=strftime("%Y-%m-%d %H:%M:%S")<CR>
-
-" _dd 不把删除的文本存在任何寄存器里。
-" :nmap <Leader>dd "_dd
-:nmap <Leader>dd "xdd
-
-" vifile
-" 编辑.vimrc 文件
-:nmap <Leader>vv :tabedit $MYVIMRC<CR>
-
-" SVN
-" map <Leader>sd :new<CR>:read !svn diff<CR>:set syntax=diff buftype=nofile<CR>gg
-Bundle 'vcscommand.vim'
-map <Leader>sd :VCSVimDiff<CR>
+" 自动修改引号
+Bundle 'surround.vim'
 
 "-----------------------------------------------------------------
+" 与系统共享粘贴版
+" 保证安装了 screen 和 tmux
+" Bundle 'kana/vim-fakeclip'
 
-" 重新载入 .vimrc 配置
-:nmap <Leader>rv :source $MYVIMRC<CR>
+Bundle 'L9'
+Bundle 'FuzzyFinder'
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" color & syntax & hight 设置
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 自动划分窗口
+Bundle 'zhaocai/GoldenView.Vim'
+" 默认的快捷键与系统的有冲突
+let g:goldenview__enable_default_mapping = 0
+" 1. split to tiled windows
+" nmap <silent> <C-L>  <Plug>GoldenViewSplit
+nmap <silent> <C-S>  <Plug>GoldenViewSplit
+
+" 2. quickly switch current window with the main pane
+" and toggle back
+nmap <silent> <F8>   <Plug>GoldenViewSwitchMain
+nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
+
+" 3. jump to next and previous window
+nmap <silent> <C-N>  <Plug>GoldenViewNext
+nmap <silent> <C-P>  <Plug>GoldenViewPrevious
+
+" 不再使用的插件
+" Bundle 'crooloose/nerdtree.git'
 "
-" "
-" bg
-" 设为 "dark" 时，Vim 试图使用深色背景上看起来舒服的颜色。
-" 如果设为 "light"，Vim 会试图使用在浅色背景上看起来舒服的颜色。
-set background=dark
-
-" 有颜色的时候
-if &t_Co > 2 || has("gui_running")
-    " 激活语法高亮
-    syntax on
-
-    " 高亮上次查找模式匹配的地方
-    set hlsearch
-endif
-
-colorscheme badwolf
-
-" -------------------------------------------------------------------
-" ScrollColor 
-" 切换颜色的插件
-" http://www.vim.org/scripts/script.php?script_id=1488
-" wget http://www.vim.org/scripts/download_script.php?src_id=5966 -O ~/.vim/plugin/ScrollColor.vim
-:nmap <Leader>sc :COLORSCROLL<CR>
-:nmap <Leader>nc :NEXTCOLOR<CR>
-:nmap <Leader>kc :PREVCOLOR<CR>
-" -------------------------------------------------------------------
-" PHP 
-" http://www.vim.org/scripts/script.php?script_id=1571
-" -------------------------------------------------------------------
-" JavaScript
-" wget http://www.vim.org/scripts/download_script.php?src_id=10728 -O ~/.vim/syntax/javascript.vim
-" -------------------------------------------------------------------
-"  jquery
-" http://www.vim.org/scripts/script.php?script_id=2416
-" wget http://www.vim.org/scripts/download_script.php?src_id=15752 -O jquery.vim
-autocmd BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
-"-------------------------------------------------------------------
-" Cocoa
-" http://www.vim.org/scripts/script.php?script_id=2674
-"-------------------------------------------------------------------
-"
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" filetypes 设置
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 文件类型探测 使用文件类型相关的插件 使用缩进文件
-filetype plugin indent on
-
-" 如果文件类型没有自动检测到可以手动设置
-" set filetype=xml
-:autocmd BufRead,BufNewFile *.phpt setfiletype php
-
-"-----------------------------------------------------------------
-" vim-doc-php Manual
-" K，显示php文档
-" 安装 pman 
-" pear 在 lion 下有问题，sudo php /usr/lib/php/install-pear-nozlib.phar
-" sudo pear channel-update doc.php.net
-" sudo pear install doc.php.net/pman
-"
-:autocmd FileType php setlocal keywordprg=pman
-"-----------------------------------------------------------------
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" autocmd 设置
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" 打开PHP自动完成
-" autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-
-" 进入文件时，返回上次编辑位置
-autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")|execute("normal `\"")|endif
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" plugin 插件设置
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+filetype plugin indent on     " required
 
 "-----------------------------------------------------------------
 " netrw
 
-:nmap <silent> <Leader>fe :30Sexplore!<CR>
+:nmap <silent> <Leader>ve :30Sexplore!<CR>
 
 " 显示/关闭横幅
 let g:netrw_banner = 0
@@ -708,7 +462,7 @@ let g:neocomplcache_enable_camel_case_completion = 1
 let g:neocomplcache_enable_underbar_completion = 1
 " Sets minimum char length of syntax keyword.
 let g:neocomplcache_min_syntax_length = 3
-" buffer file name pattern that locks neocomplcache. e.g. ku.vim or fuzzyfinder 
+" buffer file name pattern that locks neocomplcache. e.g. ku.vim or fuzzyfinder
 let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
 " Define file-type dependent dictionaries.
@@ -772,7 +526,7 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
-" Enable heavy omni completion, which require computational power and may stall the vim. 
+" Enable heavy omni completion, which require computational power and may stall the vim.
 if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
@@ -808,6 +562,8 @@ let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'
 " http://pkgs.fedoraproject.org/repo/pkgs/ctags/ctags-5.8.tar.gz/c00f82ecdcc357434731913e5b48630d/ctags-5.8.tar.gz
 " svn co https://ctags.svn.sourceforge.net/svnroot/ctags ctags
 "
+" 自动寻找父类的 tags 定义
+:set tags=tags;/
 
 "-----------------------------------------------------------------
 
@@ -819,9 +575,25 @@ let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'
 
 "-----------------------------------------------------------------
 " cscope
+" 生成 cscope index file
 " cscope -Rb
 "-----------------------------------------------------------------
-"
+" 更新 cscope 文件
+:nmap <Leader>sr :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' > cscope.files<CR>
+  \:!cscope -b -i cscope.files -f cscope.out<CR>
+  \:cs reset<CR>
+
+" 自动载入父目录中的 cscope
+function! LoadCscope()
+  let db = findfile("cscope.out", ".;")
+  if (!empty(db))
+    let path = strpart(db, 0, match(db, "/cscope.out$"))
+    set nocscopeverbose " suppress 'duplicate connection' error
+    exe "cs add " . db . " " . path
+    set cscopeverbose
+  endif
+endfunction
+
 if has("cscope")
     set csprg=/usr/local/bin/cscope
     set csto=0
@@ -835,27 +607,34 @@ if has("cscope")
         cs add $CSCOPE_DB
     endif
     set csverb
+    autocmd BufEnter /* call LoadCscope()
+
 endif
 
 " 0 或 s: 查找本 C 符号
+:nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+:nmap <Leader>ss :cs find s <C-R>=expand("<cword>")<CR><CR>
 " 1 或 g: 查找本定义
+" nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+:nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+:nmap <Leader>sg :cs find g <C-R>=expand("<cword>")<CR><CR>
 " 2 或 d: 查找本函数调用的函数
 " 3 或 c: 查找调用本函数的函数
+:nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+:nmap <Leader>sc :cs find c <C-R>=expand("<cword>")<CR><CR>
 " 4 或 t: 查找本字符串
+:nmap <C-_>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+:nmap <Leader>st :cs find t <C-R>=expand("<cword>")<CR><CR>
 " 6 或 e: 查找本 egrep 模式
 " 7 或 f: 查找本文件
 " 8 或 i: 查找包含本文件的文件
-nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>t :cs find t <C-R>=expand("<cword>")<CR><CR>
 nmap <C-_>e :cs find e <C-R>=expand("<cword>")<CR><CR>
 nmap <C-_>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-_>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
 "-----------------------------------------------------------------
-" Grep 插件 
+" Grep 插件
 " http://www.vim.org/scripts/script.php?script_id=311
 :nmap <Leader>gr :Rgrep<CR>
 
@@ -871,7 +650,15 @@ let g:Powerline_symbols = 'fancy'
 " TagList.vim
 " http://www.vim.org/scripts/script.php?script_id=273
 "
-:nmap <silent> <Leader>ft :TlistToggle<CR>
+" :nmap <silent> <Leader>vt :TlistToggle<CR>
+"-----------------------------------------------------------------
+" Tagbar
+:nmap <silent> <Leader>vt :TagbarToggle<CR>
+" 自动关闭
+let g:tagbar_autoclose = 1
+" 自动选中Tag
+let g:tagbar_autofocus = 1
+" autocmd FileType c,cpp nested :TagbarOpen
 
 let Tlist_Display_Prototype = 0
 let Tlist_Sort_Type = "order"
@@ -897,25 +684,25 @@ let Tlist_GainFocus_On_ToggleOpen=1
 " :nmap <Leader>cal :Calendar<CR>
 "-----------------------------------------------------------------
 " FuzzyFinder
-:nmap <silent> <Leader>g :FufFile<CR>
+:nmap <silent> <Leader>vg :FufFile<CR>
 
 "-----------------------------------------------------------------
 "
 " http://www.vim.org/scripts/download_script.php?src_id=16171
 " 文件夹对比
-" :DirDiff <A:Src Directory> <B:Src Directory> 
+" :DirDiff <A:Src Directory> <B:Src Directory>
 "
-"  Sets default exclude pattern: 
+"  Sets default exclude pattern:
 let g:DirDiffExcludes = ".svn,CVS,*.class,*.exe,.*.swp"
 
-" Sets default ignore pattern: 
-let g:DirDiffIgnore = "Id:,Revision:,Date:" 
+" Sets default ignore pattern:
+let g:DirDiffIgnore = "Id:,Revision:,Date:"
 "-----------------------------------------------------------------
 " 缩进可视化插件
 " 默认快捷键 <Leader>ig
 " https://github.com/mutewinter/vim-indent-guides
 " 自动计算颜色
-let g:indent_guides_auto_colors = 1
+let g:indent_guides_auto_olors = 1
 
 " let g:indent_guides_guide_size = 1
 let g:indent_guides_start_level = 2
@@ -927,6 +714,250 @@ let g:indent_guides_enable_on_vim_startup = 0
 let g:phpErrorMarker#automake = 0
 "-----------------------------------------------------------------
 "
+
+"-----------------------------------------------------------------
+map <Leader>fj :call JsBeautify()<cr>
+" or
+" autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+" for html
+" autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+" for css or scss
+" autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+"-----------------------------------------------------------------
+" PLUGIN end
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" MAP CONFIG start
+" -------------------------------------------------------------------
+" 快捷键超时时间
+" set timeoutlen=3000
+
+" 切换tab 的快捷键
+:map 11 :tabnext 1<CR>
+:map 22 :tabnext 2<CR>
+:map 33 :tabnext 3<CR>
+:map 44 :tabnext 4<CR>
+:map 55 :tabnext 5<CR>
+:map 66 :tabnext 6<CR>
+:map 77 :tabnext 7<CR>
+:map 88 :tabnext 8<CR>
+:map 99 :tabnext 9<CR>
+
+
+" 上一个标签
+" = gT
+:map __ :tabprevious<CR>
+
+" 下一个标签
+" = gt
+:map ++ :tabnext<CR>
+
+" 显示所有marks
+:nnoremap <Leader>vm :marks<CR>
+
+" 执行当前行
+" 同 "ayy@a
+:nmap <Leader>lr <Esc>yy@"
+
+" 退出
+:nmap <Leader>q :q<CR>
+:nmap <Leader>Q :qall<CR>
+
+" sudo 存档
+:nmap <Leader>fws :w !sudo tee %
+
+" 行首
+:nmap <Leader>la ^
+
+" 行尾
+:nmap <Leader>le $
+
+" 列出所有键盘映射
+:nmap <Leader>lm :map<CR>
+
+" 显示选项
+:nmap <Leader>vo :help options<CR>
+
+" 切换是否显示行号
+" nmap <Leader>vn :set number!<CR>
+:nmap <Leader>vn :set invnumber<CR>
+
+" 显示寄存器
+:nmap <Leader>vr :reg<CR>
+
+" 当前窗口垂直划分成两个
+:nmap <Leader>wv <C-W>v
+
+" 光标跳到左边窗口
+:nmap <Leader>wh <C-W><Left>
+
+" 光标跳到下边窗口
+:nmap <Leader>wj <C-W><Down>
+
+" 光标跳到上边窗口
+:nmap <Leader>wk <C-W><Up>
+
+" 光标跳到右边窗口
+:nmap <Leader>wl <C-W><Right>
+
+" 光标跳转到最顶上的窗口
+:nmap <Leader>wt <C-W>t
+
+" 光标跳转到最底下的窗口
+:nmap <Leader>wb <C-W>b
+
+" 窗口移到最上边
+:nmap <Leader>wK <C-W>K
+
+" 窗口移到最下边
+:nmap <Leader>wJ <C-W>J
+
+" 窗口移到最左边
+:nmap <Leader>wH <C-W>H
+
+" 窗口移到最右边
+:nmap <Leader>wL <C-W>L
+
+" 窗口移到新Tab里
+" 注意:tab split 会建立一个新的标签页，包含一个窗口，编辑和刚才所在窗口中的缓冲区相同的缓冲
+:nmap <Leader>wT <C-W>T
+
+" 上移本行
+:nmap <Leader>lj :m-2<CR>
+
+" 下移本行
+:nmap <Leader>lk :m+<CR>
+
+" 列出当前光标所在的行的所有的匹配，然后选择一个并跳转之
+" [I 在当前文件中搜索所有这个单词
+:nmap <Leader>sn [I:let index = 1<Bar>let index = input("第几个? ")<Bar>exe "normal " . index ."[\t"<Bar>unlet index<CR>
+
+" 插入当前路径
+:imap <Leader>ap :r !pwd<CR>A
+" :imap <Leader>ap redir => m | silent echo g:pwd | redir END | put=m
+
+" 插入当前时间
+:imap <Leader>at <C-R>=strftime("%Y-%m-%d %H:%M:%S")<CR>
+
+" _dd 不把删除的文本存在任何寄存器里。
+" :nmap <Leader>dd "_dd
+:nmap <Leader>dd "xdd
+
+" vifile
+" 编辑.vimrc 文件
+:nmap <Leader>vv :tabedit $MYVIMRC<CR>
+
+" 切换复制粘贴模式
+" Use F10 to toggle 'paste' mode
+" set pastetoggle=<F10>
+" 切换到粘贴模式
+" set paste
+:nmap <Leader>mc :set paste!<CR>
+:imap <Leader>p <Esc>:set paste!<CR>i
+
+" SVN
+" map <Leader>sd :new<CR>:read !svn diff<CR>:set syntax=diff buftype=nofile<CR>gg
+Bundle 'vcscommand.vim'
+map <Leader>sd :VCSVimDiff<CR>
+
+" 再新 tab 打开 .h 或者 .cpp
+:map <Leader>th :tabnew %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
+"-----------------------------------------------------------------
+
+" 重新载入 .vimrc 配置
+:nmap <Leader>rv :source $MYVIMRC<CR>
+
+" bg
+" 设为 "dark" 时，Vim 试图使用深色背景上看起来舒服的颜色。
+" 如果设为 "light"，Vim 会试图使用在浅色背景上看起来舒服的颜色。
+set background=dark
+
+" 激活语法高亮
+syntax on
+
+" 高亮上次查找模式匹配的地方
+set hlsearch
+
+" 配色方案
+colorscheme badwolf
+
+" -------------------------------------------------------------------
+" ScrollColor
+" 切换颜色的插件
+" http://www.vim.org/scripts/script.php?script_id=1488
+" wget http://www.vim.org/scripts/download_script.php?src_id=5966 -O ~/.vim/plugin/ScrollColor.vim
+:nmap <Leader>csc :COLORSCROLL<CR>
+
+" 命令模式下, 支持常用的快捷键
+cnoremap <C-A>      <Home>
+cnoremap <C-E>      <End>
+cnoremap <C-K>      <C-U>
+
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
+" -------------------------------------------------------------------
+" MAP CONFIG end
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" FUNCTIONS start
+" -------------------------------------------------------------------
+
+" 删除行尾空格
+if !exists("*TrimWhiteSpace")
+function TrimWhiteSpace()
+    %s/\s*$//
+    ''
+endfunction
+endif
+
+" 显示TAB Index
+" http://superuser.com/questions/331272/vim-show-the-index-of-tabs-in-the-tabline
+" (Based on http://stackoverflow.com/questions/5927952/whats-implementation-of-vims-default-tabline-function)
+if exists("+showtabline")
+function! MyTabLine()
+    let s = ''
+    let wn = ''
+    let t = tabpagenr()
+    let i = 1
+    while i <= tabpagenr('$')
+        let buflist = tabpagebuflist(i)
+        let winnr = tabpagewinnr(i)
+        let s .= '%' . i . 'T'
+        let s .= (i == t ? '%1*' : '%2*')
+        let s .= ' '
+        let wn = tabpagewinnr(i,'$')
+
+        let s .= '%#TabNum#'
+        let s .= i
+        " let s .= '%*'
+        let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
+        let bufnr = buflist[winnr - 1]
+        let file = bufname(bufnr)
+        let buftype = getbufvar(bufnr, 'buftype')
+        if buftype == 'nofile'
+            if file =~ '\/.'
+                let file = substitute(file, '.*\/\ze.', '', '')
+            endif
+        else
+            let file = fnamemodify(file, ':p:t')
+        endif
+        if file == ''
+            let file = '[No Name]'
+        endif
+        let s .= ' ' . file . ' '
+        let i = i + 1
+    endwhile
+    let s .= '%T%#TabLineFill#%='
+    let s .= (tabpagenr('$') > 1 ? '%999XX' : 'X')
+    return s
+endfunction
+set stal=2
+set tabline=%!MyTabLine()
+highlight link TabNum Special
+endif
+
 if !exists("*AddHeader")
 function! AddHeader()
     call append(1,"/**")
@@ -941,16 +972,83 @@ endfunction
 endif
 :nmap <Leader>ah :call AddHeader()<CR>
 
-"-----------------------------------------------------------------
-map <Leader>fj :call JsBeautify()<cr>
-" or
-" autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
-" for html
-" autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
-" for css or scss
-" autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
-"-----------------------------------------------------------------
+" -------------------------------------------------------------------
+function! CmdLine(str)
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
+endfunction
 
+" From an idea by Michael Naumann
+function! VisualSearch(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
+" 搜索选中的东西 Basically you press * or # to search for the current selection
+vnoremap <silent> * :call VisualSearch('f')<CR>
+vnoremap <silent> # :call VisualSearch('b')<CR>
+vnoremap <silent> gv :call VisualSearch('gv')<CR>
+" -------------------------------------------------------------------
+" FUNCTIONS end
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" FILETYPE CONFIG start
+" -------------------------------------------------------------------
+" PHP
+" http://www.vim.org/scripts/script.php?script_id=1571
+" -------------------------------------------------------------------
+" JavaScript
+" wget http://www.vim.org/scripts/download_script.php?src_id=10728 -O ~/.vim/syntax/javascript.vim
+" -------------------------------------------------------------------
+"  jquery
+" http://www.vim.org/scripts/script.php?script_id=2416
+" wget http://www.vim.org/scripts/download_script.php?src_id=15752 -O jquery.vim
+autocmd BufRead,BufNewFile jquery.*.js set filetype=javascript syntax=jquery
+"-------------------------------------------------------------------
+" Cocoa
+" http://www.vim.org/scripts/script.php?script_id=2674
+"-------------------------------------------------------------------
+" 文件类型探测 使用文件类型相关的插件 使用缩进文件
+filetype plugin indent on
+
+" 如果文件类型没有自动检测到可以手动设置
+:autocmd BufRead,BufNewFile *.phpt setfiletype php
+:autocmd BufRead,BufNewFile *.jce setfiletype cpp
+
+"-----------------------------------------------------------------
+" vim-doc-php Manual
+" K，显示php文档
+" 安装 pman
+" pear 在 lion 下有问题，sudo php /usr/lib/php/install-pear-nozlib.phar
+" sudo pear channel-update doc.php.net
+" sudo pear install doc.php.net/pman
+:autocmd FileType php setlocal keywordprg=pman
+
+" 进入文件时，返回上次编辑位置
+autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")|execute("normal `\"")|endif
+"-----------------------------------------------------------------
+" FILETYPE CONFIG end
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" INCLUDE start
+"-----------------------------------------------------------------
 let g:os_vimrc = $HOME . "/work/shell/etc/vim/" . g:os . '.vimrc'
 if filereadable(g:os_vimrc)
     execute 'silent! source ' . g:os_vimrc
@@ -962,3 +1060,46 @@ if filereadable(g:host_vimrc)
 endif
 
 "-----------------------------------------------------------------
+" INCLUDE end
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" " Creates a session
+" function! MakeSession()
+  " let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  " if (filewritable(b:sessiondir) != 2)
+    " exe 'silent !mkdir -p ' b:sessiondir
+    " redraw!
+  " endif
+  " let b:sessionfile = b:sessiondir . '/session.vim'
+  " exe "mksession! " . b:sessionfile
+" endfunction
+
+" " Updates a session, BUT ONLY IF IT ALREADY EXISTS
+" function! UpdateSession()
+  " let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  " let b:sessionfile = b:sessiondir . "/session.vim"
+  " if (filereadable(b:sessionfile))
+    " exe "mksession! " . b:sessionfile
+    " echo "updating session"
+  " endif
+" endfunction
+
+" " Loads a session if it exists
+" function! LoadSession()
+  " if argc() == 0
+    " let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+    " let b:sessionfile = b:sessiondir . "/session.vim"
+    " if (filereadable(b:sessionfile))
+      " exe 'source ' b:sessionfile
+    " else
+      " echo "No session loaded."
+    " endif
+  " else
+    " let b:sessionfile = ""
+    " let b:sessiondir = ""
+  " endif
+" endfunction
+
+" au VimEnter * nested :call LoadSession()
+" au VimLeave * :call UpdateSession()
+" map <leader>m :call MakeSession()<CR>
+
