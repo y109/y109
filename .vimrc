@@ -1,5 +1,5 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" VIM CONFIG start
+" VIM BASE_SETTING start
 "-----------------------------------------------------------------
 if v:version < 700
     finish
@@ -14,6 +14,9 @@ endif
 " [[ \ ]] 会在 { 上下跳转
 " "}}}
 "
+" 在终端的 title 上显示当前文件名 
+set title
+
 " 解释 bash alias
 :set shellcmdflag=-ic
 
@@ -171,7 +174,7 @@ set wildmenu
 set wildmode=list:longest,full
 
 " 文件和目录名的补全中忽略符合其中任何模式的文件
-:set wildignore=*.o,*.obj,*.bak,*.exe
+:set wildignore+=*.o,*.obj,*.bak,*.git,*.pyc,*.exe
 
 " 备份
 set writebackup
@@ -222,8 +225,22 @@ set viminfo='20,\"50,:20,%,n~/.viminfo
 " vimdiff
 :set diffopt=filler,context:9
 
+" bg
+" 设为 "dark" 时，Vim 试图使用深色背景上看起来舒服的颜色。
+" 如果设为 "light"，Vim 会试图使用在浅色背景上看起来舒服的颜色。
+set background=dark
+
+" 激活语法高亮
+syntax on
+
+" 高亮上次查找模式匹配的地方
+set hlsearch
+
+" find 的路径
+:set path=.,/usr/include,,**
+
 "-----------------------------------------------------------------
-" VIM CONFIG end
+" VIM BASE_SETTING end
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -297,7 +314,7 @@ Bundle 'DoxygenToolkit.vim'
 Bundle 'mru.vim'
 let MRU_Exclude_Files = '^\/var\/.*\/svn-.*\|^/tmp/.*\|^/var/tmp/.*'
 " 语法检查
-Bundle 'Syntastic'
+" Bundle 'Syntastic'
 Bundle 'Simple-Javascript-Indenter'
 Bundle 'html-xml-tag-matcher'
 Bundle 'xml.vim'
@@ -311,8 +328,8 @@ Bundle 'rking/ag.vim'
 let g:agprg="/usr/local/bin/ag --column"
 
 " Dash
-Bundle 'rizzatti/funcoo.vim'
-Bundle 'rizzatti/dash.vim'
+" Bundle 'rizzatti/funcoo.vim'
+" Bundle 'rizzatti/dash.vim'
 
 " 快速导航
 Bundle 'ctrlp.vim'
@@ -328,6 +345,15 @@ let g:ctrlp_open_multiple_files = '9tjr'
 " 自动修改引号
 Bundle 'surround.vim'
 
+" cocoa
+Bundle 'cocoa.vim'
+
+" A
+Bundle 'a.vim'
+
+" 输入方法时在状态栏显示方法定义
+" ctags -R --fields=+lS
+Bundle 'echofunc.vim'
 "-----------------------------------------------------------------
 " 与系统共享粘贴版
 " 保证安装了 screen 和 tmux
@@ -358,7 +384,17 @@ nmap <silent> <C-P>  <Plug>GoldenViewPrevious
 "
 filetype plugin indent on     " required
 
+" -------------------------------------------------------------------
+" 配色方案
+colorscheme badwolf
+
+" ScrollColor
+" 切换颜色的插件
+" http://www.vim.org/scripts/script.php?script_id=1488
+" wget http://www.vim.org/scripts/download_script.php?src_id=5966 -O ~/.vim/plugin/ScrollColor.vim
+:nmap <Leader>csc :COLORSCROLL<CR>
 "-----------------------------------------------------------------
+
 " netrw
 
 :nmap <silent> <Leader>ve :30Sexplore!<CR>
@@ -823,6 +859,9 @@ map <Leader>fj :call JsBeautify()<cr>
 " 注意:tab split 会建立一个新的标签页，包含一个窗口，编辑和刚才所在窗口中的缓冲区相同的缓冲
 :nmap <Leader>wT <C-W>T
 
+" 在新tab里打开当前光标下的文件
+:map gf :e <cfile><CR>
+
 " 上移本行
 :nmap <Leader>lj :m-2<CR>
 
@@ -863,31 +902,9 @@ map <Leader>sd :VCSVimDiff<CR>
 
 " 再新 tab 打开 .h 或者 .cpp
 :map <Leader>th :tabnew %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
-"-----------------------------------------------------------------
 
 " 重新载入 .vimrc 配置
 :nmap <Leader>rv :source $MYVIMRC<CR>
-
-" bg
-" 设为 "dark" 时，Vim 试图使用深色背景上看起来舒服的颜色。
-" 如果设为 "light"，Vim 会试图使用在浅色背景上看起来舒服的颜色。
-set background=dark
-
-" 激活语法高亮
-syntax on
-
-" 高亮上次查找模式匹配的地方
-set hlsearch
-
-" 配色方案
-colorscheme badwolf
-
-" -------------------------------------------------------------------
-" ScrollColor
-" 切换颜色的插件
-" http://www.vim.org/scripts/script.php?script_id=1488
-" wget http://www.vim.org/scripts/download_script.php?src_id=5966 -O ~/.vim/plugin/ScrollColor.vim
-:nmap <Leader>csc :COLORSCROLL<CR>
 
 " 命令模式下, 支持常用的快捷键
 cnoremap <C-A>      <Home>
@@ -896,6 +913,12 @@ cnoremap <C-K>      <C-U>
 
 cnoremap <C-P> <Up>
 cnoremap <C-N> <Down>
+
+" 把文件转换为 utf-8 编码
+:nmap <Leader>f8 :set nobomb<CR>:set fileencoding=utf-8<CR>:set fileformat=unix<CR>
+
+" 把工作目录设置为当前目录
+nnoremap <Leader>. :lcd %:p:h<CR>
 " -------------------------------------------------------------------
 " MAP CONFIG end
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1010,6 +1033,14 @@ vnoremap <silent> gv :call VisualSearch('gv')<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FILETYPE CONFIG start
 " -------------------------------------------------------------------
+" 设置文件类型
+let filetype_m='objc'
+
+" 如果文件类型没有自动检测到可以手动设置
+:autocmd BufRead,BufNewFile *.phpt setfiletype php
+:autocmd BufRead,BufNewFile *.jce setfiletype cpp
+:autocmd BufRead,BufNewFile hosts setfiletype conf
+
 " PHP
 " http://www.vim.org/scripts/script.php?script_id=1571
 " -------------------------------------------------------------------
@@ -1026,10 +1057,6 @@ autocmd BufRead,BufNewFile jquery.*.js set filetype=javascript syntax=jquery
 "-------------------------------------------------------------------
 " 文件类型探测 使用文件类型相关的插件 使用缩进文件
 filetype plugin indent on
-
-" 如果文件类型没有自动检测到可以手动设置
-:autocmd BufRead,BufNewFile *.phpt setfiletype php
-:autocmd BufRead,BufNewFile *.jce setfiletype cpp
 
 "-----------------------------------------------------------------
 " vim-doc-php Manual
@@ -1062,44 +1089,3 @@ endif
 "-----------------------------------------------------------------
 " INCLUDE end
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" " Creates a session
-" function! MakeSession()
-  " let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-  " if (filewritable(b:sessiondir) != 2)
-    " exe 'silent !mkdir -p ' b:sessiondir
-    " redraw!
-  " endif
-  " let b:sessionfile = b:sessiondir . '/session.vim'
-  " exe "mksession! " . b:sessionfile
-" endfunction
-
-" " Updates a session, BUT ONLY IF IT ALREADY EXISTS
-" function! UpdateSession()
-  " let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-  " let b:sessionfile = b:sessiondir . "/session.vim"
-  " if (filereadable(b:sessionfile))
-    " exe "mksession! " . b:sessionfile
-    " echo "updating session"
-  " endif
-" endfunction
-
-" " Loads a session if it exists
-" function! LoadSession()
-  " if argc() == 0
-    " let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-    " let b:sessionfile = b:sessiondir . "/session.vim"
-    " if (filereadable(b:sessionfile))
-      " exe 'source ' b:sessionfile
-    " else
-      " echo "No session loaded."
-    " endif
-  " else
-    " let b:sessionfile = ""
-    " let b:sessiondir = ""
-  " endif
-" endfunction
-
-" au VimEnter * nested :call LoadSession()
-" au VimLeave * :call UpdateSession()
-" map <leader>m :call MakeSession()<CR>
-
